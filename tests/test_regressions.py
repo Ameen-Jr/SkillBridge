@@ -68,7 +68,7 @@ class TestPipelineModule:
 
     def test_pages_do_not_import_app(self):
         for page in (ROOT / "pages").glob("*.py"):
-            assert "from app import" not in page.read_text(), page.name
+            assert "from app import" not in page.read_text(encoding="utf-8"), page.name
 
 
 PAGES = [
