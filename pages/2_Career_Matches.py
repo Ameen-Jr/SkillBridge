@@ -19,7 +19,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app import load_pipeline
+from src.pipeline import load_pipeline
 from src.feature_engineering import transform_user_query
 from src.matching import (
     aggregate_matches_by_category,
@@ -96,14 +96,19 @@ with mc3:
     top_score = cosine_cat.iloc[0]["avg_score"] if not cosine_cat.empty else 0
     st.metric("Top Score", f"{top_score:.3f}")
 with mc4:
-    top_overlap = cosine_cat.iloc[0]
-    if not cosine_cat.empty and "sample_skills" in cosine_cat.columns:
-        best_skills = top_overlap.get("sample_skills", [])
-        user_set = set(user_skills)
-        match_pct = round(100 * len(user_set & set(best_skills)) / len(best_skills), 0) if best_skills else 0
+    if not cosine_cat.empty:
+        best_skills = cosine_cat.iloc[0].get("sample_skills", [])
+        best_skills = best_skills if isinstance(best_skills, list) else []
+        match_pct = round(100 * len(set(user_skills) & set(best_skills)) / len(best_skills)) if best_skills else 0
         st.metric("Skill Coverage", f"{match_pct:.0f}%")
     else:
         st.metric("Skill Coverage", "—")
+
+if cosine_cat.empty:
+    st.warning(
+        "None of your skills overlap with the vocabulary of the job descriptions in this dataset, "
+        "so no similarity scores could be computed. Add more skills on **👤 My Skill Profile**."
+    )
 
 st.markdown("---")
 

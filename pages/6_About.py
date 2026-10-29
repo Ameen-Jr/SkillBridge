@@ -63,7 +63,7 @@ with col1:
     **Data Preparation:** Job descriptions are loaded, validated, deduplicated,
     and normalized (lowercased, punctuation-cleaned).
 
-    **Skill Extraction:** A configurable dictionary of ~80 canonical technical skills
+    **Skill Extraction:** A configurable dictionary of 125 canonical technical skills
     with alias mapping (e.g., ML → Machine Learning) is matched against cleaned text
     using word-boundary regular expressions to avoid false positives.
 
@@ -120,8 +120,8 @@ with col2:
     - Cosine similarity scores are similarity measures, NOT employment probability estimates.
     - K-means clusters are not verified career labels — they reflect TF-IDF feature patterns.
     - Skill demand frequencies are based only on the loaded dataset, not the full job market.
-    - The evaluation set is hand-crafted (30–20 examples) and is not an industry benchmark.
-    - Learning resources are curated manually and may become outdated.
+    - The evaluation set is hand-crafted (30 skill-extraction and 20 career-matching examples) and is not an industry benchmark.
+    - Learning resources are curated manually (47 skills) and may become outdated; other skills get a generic search link.
     """)
 
     st.markdown("### 🚀 Future Enhancements")
@@ -167,6 +167,7 @@ SkillBridgeML/
 │   └── README.md
 ├── src/
 │   ├── config.py           # Central configuration
+│   ├── pipeline.py         # Cached shared ML pipeline (used by app + pages)
 │   ├── data_loader.py      # Dataset loading & validation
 │   ├── preprocessing.py    # Text cleaning
 │   ├── skill_extractor.py  # Skill dictionary matching
@@ -186,7 +187,8 @@ SkillBridgeML/
 │   ├── 5_Model_Evaluation.py
 │   └── 6_About.py
 ├── tests/                  # Pytest test suite
-└── docs/                   # Reports, diagrams, viva Q&A
+├── reports/                # Example exports
+└── docs/                   # Report, architecture, demo script, viva Q&A
 """, language="text")
 
 st.markdown("---")

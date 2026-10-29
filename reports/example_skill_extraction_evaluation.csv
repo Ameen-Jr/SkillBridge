@@ -1,0 +1,31 @@
+text_snippet,expected_skills,predicted_skills,true_positives,false_positives,false_negatives,precision,recall,f1
+Experience with Python and SQL required,"python, sql","python, sql",2,0,0,1.0,1.0,1.0
+Must know React and TypeScript for frontend development,"react, typescript","react, typescript",2,0,0,1.0,1.0,1.0
+Docker and Kubernetes for container orchestration,"docker, kubernetes","docker, kubernetes",2,0,0,1.0,1.0,1.0
+Machine learning with scikit-learn and pandas,"machine learning, pandas, scikit-learn","machine learning, pandas, scikit-learn",3,0,0,1.0,1.0,1.0
+Deep learning using TensorFlow and PyTorch,"deep learning, pytorch, tensorflow","deep learning, pytorch, tensorflow",3,0,0,1.0,1.0,1.0
+Data analysis using Excel and Tableau,"data analysis, excel, tableau","data analysis, excel, tableau",3,0,0,1.0,1.0,1.0
+Build RESTful APIs with Node.js and Express,"node.js, restful api",node.js,1,0,1,1.0,0.5,0.667
+PostgreSQL for database management and Redis for caching,"postgresql, redis","postgresql, redis",2,0,0,1.0,1.0,1.0
+AWS cloud infrastructure and CI/CD pipelines with Jenkins,"aws, ci/cd, jenkins","aws, ci/cd, jenkins",3,0,0,1.0,1.0,1.0
+Natural language processing and computer vision projects,"computer vision, natural language processing","computer vision, natural language processing",2,0,0,1.0,1.0,1.0
+Git version control and Linux system administration,"git, linux","git, linux",2,0,0,1.0,1.0,1.0
+Angular framework with TypeScript and HTML/CSS,"angular, css, html, typescript","angular, css, html, typescript",4,0,0,1.0,1.0,1.0
+MongoDB and Elasticsearch for data storage,"elasticsearch, mongodb","elasticsearch, mongodb",2,0,0,1.0,1.0,1.0
+Java Spring Boot for enterprise applications,"java, spring boot","java, spring boot",2,0,0,1.0,1.0,1.0
+Agile and Scrum project management,"agile, scrum","agile, scrum",2,0,0,1.0,1.0,1.0
+Power BI and Tableau for business intelligence,"power bi, tableau","power bi, tableau",2,0,0,1.0,1.0,1.0
+Apache Spark and Hadoop for big data processing,"hadoop, spark","hadoop, spark",2,0,0,1.0,1.0,1.0
+Go programming language for high-performance services,go,go,1,0,0,1.0,1.0,1.0
+Vue.js for reactive web interfaces,vue,vue,1,0,0,1.0,1.0,1.0
+Statistical analysis using R and Python,"python, r, statistical analysis","python, r, statistical analysis",3,0,0,1.0,1.0,1.0
+FastAPI with async Python and PostgreSQL,"fastapi, postgresql, python","fastapi, postgresql, python",3,0,0,1.0,1.0,1.0
+Terraform and Ansible for infrastructure as code,"ansible, terraform","ansible, terraform",2,0,0,1.0,1.0,1.0
+GraphQL API development with Apollo Server,graphql,graphql,1,0,0,1.0,1.0,1.0
+C++ and Rust for systems programming,"c++, rust","c++, rust",2,0,0,1.0,1.0,1.0
+Airflow for orchestrating data pipelines,airflow,airflow,1,0,0,1.0,1.0,1.0
+NumPy and Matplotlib for scientific computing,"matplotlib, numpy","matplotlib, numpy",2,0,0,1.0,1.0,1.0
+Microservices architecture and system design patterns,"microservices, system design","design patterns, microservices, system design",2,1,0,0.667,1.0,0.8
+Penetration testing and cybersecurity audits,"cybersecurity, penetration testing","cybersecurity, penetration testing",2,0,0,1.0,1.0,1.0
+Next.js server-side rendering and Tailwind CSS styling,"next.js, tailwind css","css, next.js, tailwind css",2,1,0,0.667,1.0,0.8
+Time series analysis and forecasting models,time series analysis,time series analysis,1,0,0,1.0,1.0,1.0

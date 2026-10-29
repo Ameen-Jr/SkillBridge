@@ -1,0 +1,11 @@
+rank,job_title,category,similarity_score,matching_skills,missing_skills
+1,Junior Machine Learning Engineer,Machine Learning Engineer,0.2401,"git, machine learning, pandas, python","numpy, pytorch, scikit-learn, statistical analysis, tensorflow"
+2,AutoML Engineer,Machine Learning Engineer,0.239,"docker, git, machine learning, python","aws, deep learning, pytorch, scikit-learn, statistical analysis"
+3,ML Research Scientist,Machine Learning Engineer,0.2259,"git, machine learning, python","deep learning, linear algebra, natural language processing, probability, pytorch, statistical analysis, tensorflow"
+4,Machine Learning Engineer - Drug Discovery,Machine Learning Engineer,0.2242,"git, machine learning, pandas, python","deep learning, numpy, pytorch, scikit-learn, statistical analysis"
+5,Fraud Analytics Analyst,Data Analyst,0.2179,"machine learning, python, sql","data analysis, power bi, statistical analysis, tableau"
+6,Time Series Forecasting Engineer,Machine Learning Engineer,0.215,"git, machine learning, pandas, python, sql","deep learning, numpy, scikit-learn, statistical analysis, time series analysis"
+7,Recommendation Systems Engineer,Machine Learning Engineer,0.2128,"git, machine learning, pandas, python, sql","a/b testing, deep learning, numpy, scikit-learn, spark, statistical analysis"
+8,Python Compliance Engineer,Python Developer,0.2041,"docker, git, python, sql","aws, cybersecurity, data analysis, postgresql"
+9,Climate Data Analyst,Data Analyst,0.1997,"pandas, python, sql","data analysis, data visualization, matplotlib, numpy, plotly, r, statistical analysis, time series analysis"
+10,Machine Learning Engineer - Retail,Machine Learning Engineer,0.1977,"git, machine learning, pandas, python, sql","numpy, scikit-learn, statistical analysis, time series analysis"

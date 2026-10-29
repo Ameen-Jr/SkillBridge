@@ -196,10 +196,9 @@ def get_plotly_network_figure(
             "color": node_color,
             "colorscale": "Viridis",
             "colorbar": {
-                "title": "Job Frequency",
+                "title": {"text": "Job Frequency", "font": {"color": "#c9d1d9"}},
                 "thickness": 12,
                 "tickfont": {"color": "#c9d1d9"},
-                "titlefont": {"color": "#c9d1d9"},
             },
             "line": {"width": 1, "color": "#30363d"},
             "opacity": 0.9,

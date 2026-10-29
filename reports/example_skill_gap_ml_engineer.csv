@@ -1,0 +1,30 @@
+skill,status,career_category,demand_frequency,pct_of_jobs,priority_rank,recommended_resources
+docker,Possessed,Machine Learning Engineer,,,,
+git,Possessed,Machine Learning Engineer,,,,
+machine learning,Possessed,Machine Learning Engineer,,,,
+pandas,Possessed,Machine Learning Engineer,,,,
+python,Possessed,Machine Learning Engineer,,,,
+sql,Possessed,Machine Learning Engineer,,,,
+a/b testing,Missing,Machine Learning Engineer,3,11.5,9,Search 'A/B Testing' on Coursera (https://www.coursera.org/search?query=a/b%20testing)
+aws,Missing,Machine Learning Engineer,4,15.4,8,AWS Skill Builder (https://skillbuilder.aws/) | AWS Documentation (https://docs.aws.amazon.com/)
+c++,Missing,Machine Learning Engineer,,,,
+ci/cd,Missing,Machine Learning Engineer,,,,
+computer vision,Missing,Machine Learning Engineer,3,11.5,10,OpenCV Python Tutorials (https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html) | CS231n Stanford (http://cs231n.stanford.edu/)
+data analysis,Missing,Machine Learning Engineer,,,,
+deep learning,Missing,Machine Learning Engineer,17,65.4,1,Deep Learning Specialization (Coursera) (https://www.coursera.org/specializations/deep-learning) | PyTorch Tutorials (https://pytorch.org/tutorials/) | TensorFlow Get Started (https://www.tensorflow.org/learn)
+feature engineering,Missing,Machine Learning Engineer,,,,
+kafka,Missing,Machine Learning Engineer,,,,
+kubernetes,Missing,Machine Learning Engineer,,,,
+linear algebra,Missing,Machine Learning Engineer,,,,
+linux,Missing,Machine Learning Engineer,,,,
+mlops,Missing,Machine Learning Engineer,,,,
+natural language processing,Missing,Machine Learning Engineer,6,23.1,7,Hugging Face NLP Course (https://huggingface.co/learn/nlp-course) | Stanford CS224N (NLP with DL) (https://web.stanford.edu/class/cs224n/)
+numpy,Missing,Machine Learning Engineer,14,53.8,4,NumPy Documentation (https://numpy.org/doc/stable/)
+probability,Missing,Machine Learning Engineer,,,,
+pytorch,Missing,Machine Learning Engineer,15,57.7,3,PyTorch Tutorials (https://pytorch.org/tutorials/)
+r,Missing,Machine Learning Engineer,,,,
+scikit-learn,Missing,Machine Learning Engineer,14,53.8,5,Scikit-learn Tutorials (https://scikit-learn.org/stable/tutorial/index.html)
+spark,Missing,Machine Learning Engineer,,,,
+statistical analysis,Missing,Machine Learning Engineer,16,61.5,2,Khan Academy Statistics (https://www.khanacademy.org/math/statistics-probability)
+tensorflow,Missing,Machine Learning Engineer,9,34.6,6,TensorFlow Tutorials (https://www.tensorflow.org/tutorials)
+time series analysis,Missing,Machine Learning Engineer,,,,

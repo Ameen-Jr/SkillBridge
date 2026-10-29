@@ -11,7 +11,7 @@ Contains:
 All metrics are computed from actual test data.
 No scores are fabricated. Limitations of the evaluation data are documented.
 
-IMPORTANT: The evaluation set is small (30–20 examples) and hand-crafted.
+IMPORTANT: The evaluation set is small (30 and 20 examples) and hand-crafted.
 Results should be interpreted as indicative, not as definitive benchmarks.
 """
 

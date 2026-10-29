@@ -136,6 +136,9 @@ def compute_skill_demand(
         pct = round(100 * count / total_jobs, 1)
         records.append({"skill": skill, "frequency": count, "pct_of_jobs": pct})
 
+    if not records:
+        return pd.DataFrame(columns=["skill", "frequency", "pct_of_jobs"])
+
     return (
         pd.DataFrame(records)
         .sort_values("frequency", ascending=False)

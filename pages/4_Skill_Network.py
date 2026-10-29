@@ -17,7 +17,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app import load_pipeline
+from src.pipeline import load_pipeline
 from src.skill_network import (
     build_network_graph,
     get_network_stats,

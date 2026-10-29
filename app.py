@@ -22,16 +22,8 @@ import streamlit as st
 # Ensure src/ is importable when running from project root
 sys.path.insert(0, str(Path(__file__).parent))
 
-from src.config import CAREER_CATEGORIES, N_CLUSTERS, SKILL_DICTIONARY
-from src.data_loader import get_dataset_stats, load_dataset
-from src.feature_engineering import (
-    build_skill_cooccurrence,
-    build_skill_frequency,
-    build_tfidf_matrix,
-)
-from src.clustering import fit_kmeans, get_cluster_info, calculate_silhouette
-from src.preprocessing import preprocess_dataframe
-from src.skill_extractor import extract_skills_from_df
+from src.config import SKILL_DICTIONARY
+from src.pipeline import load_pipeline
 
 # ---------------------------------------------------------------------------
 # Page configuration
@@ -213,62 +205,6 @@ h2, h3 {
 
 
 # ---------------------------------------------------------------------------
-# Cached resources — loaded once and shared across all pages
-# ---------------------------------------------------------------------------
-
-@st.cache_resource(show_spinner="Loading dataset and building ML pipeline…")
-def load_pipeline():
-    """
-    Load data, preprocess, extract skills, fit TF-IDF and K-means.
-
-    Returns a dict with all shared ML artifacts.
-    """
-    # Load dataset
-    df, source = load_dataset(prefer_hf=True)
-
-    # Preprocess and extract skills
-    df = preprocess_dataframe(df)
-    df["extracted_skills"] = extract_skills_from_df(df)
-
-    # TF-IDF
-    texts = df["clean_description"].tolist()
-    vectorizer, tfidf_matrix = build_tfidf_matrix(texts)
-
-    # K-means
-    n_clusters = min(N_CLUSTERS, len(df) - 1)
-    kmeans, labels = fit_kmeans(tfidf_matrix, n_clusters=n_clusters)
-    df["cluster"] = labels
-
-    # Cluster info
-    cluster_info = get_cluster_info(kmeans, labels, tfidf_matrix, vectorizer, df)
-
-    # Silhouette score
-    silhouette = calculate_silhouette(tfidf_matrix, labels)
-
-    # Skill co-occurrence and frequency
-    skill_lists = df["extracted_skills"].tolist()
-    cooccurrence = build_skill_cooccurrence(skill_lists)
-    skill_frequency = build_skill_frequency(skill_lists)
-
-    # Dataset statistics
-    stats = get_dataset_stats(df)
-
-    return {
-        "df": df,
-        "source": source,
-        "vectorizer": vectorizer,
-        "tfidf_matrix": tfidf_matrix,
-        "kmeans": kmeans,
-        "labels": labels,
-        "cluster_info": cluster_info,
-        "silhouette": silhouette,
-        "cooccurrence": cooccurrence,
-        "skill_frequency": skill_frequency,
-        "stats": stats,
-    }
-
-
-# ---------------------------------------------------------------------------
 # Session state initialization
 # ---------------------------------------------------------------------------
 
@@ -299,9 +235,12 @@ with st.sidebar:
 
     if st.button("Update Profile", key="sidebar_update_btn"):
         from src.preprocessing import skills_from_user_input
-        parsed = skills_from_user_input(sidebar_skills)
-        st.session_state.user_skills = parsed
-        st.success(f"✅ {len(parsed)} skills saved.")
+        from src.skill_extractor import normalize_user_skills
+        recognized, unrecognized = normalize_user_skills(skills_from_user_input(sidebar_skills))
+        st.session_state.user_skills = recognized
+        st.success(f"✅ {len(recognized)} skills saved.")
+        if unrecognized:
+            st.warning("Not recognized (skipped): " + ", ".join(unrecognized[:5]))
 
     if st.session_state.user_skills:
         st.markdown("**Current skills:**")
@@ -446,12 +385,14 @@ st.markdown("---")
 
 # ML Pipeline Overview
 st.markdown("### ⚙️ Analysis Pipeline")
+_sil = pipeline.get("silhouette")
+silhouette_text = f"{_sil:.3f}" if _sil is not None else "N/A"
 steps = [
     ("1. Data Loading & Validation", "Loads job descriptions from CSV, validates schema, handles missing values."),
     ("2. Text Preprocessing", "Cleans text: lowercasing, punctuation normalization, whitespace collapse."),
     ("3. Skill Extraction", "Identifies technical skills using a word-boundary dictionary matcher with alias resolution."),
-    ("4. TF-IDF Vectorization", f"Converts {stats['total_records']} job descriptions into {500}-dimensional feature vectors."),
-    ("5. K-Means Clustering", f"Groups similar jobs into {pipeline['kmeans'].n_clusters} clusters (silhouette = {pipeline['silhouette']:.3f if pipeline['silhouette'] else 'N/A'})."),
+    ("4. TF-IDF Vectorization", f"Converts {stats['total_records']} job descriptions into {len(pipeline['vectorizer'].vocabulary_)}-dimensional feature vectors."),
+    ("5. K-Means Clustering", f"Groups similar jobs into {pipeline['kmeans'].n_clusters} clusters (silhouette = {silhouette_text})."),
     ("6. Cosine Similarity Matching", "Ranks career profiles by similarity to the user's skill vector."),
     ("7. Skill Gap Analysis", "Identifies possessed vs. missing skills and ranks them by dataset demand."),
     ("8. Learning Recommendations", "Maps missing skills to curated learning resources."),

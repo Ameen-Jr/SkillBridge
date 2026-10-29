@@ -66,7 +66,7 @@ SKILL_ALIASES: dict[str, str] = {
     "mongo": "mongodb",
     "es": "elasticsearch",
     "gcp": "google cloud platform",
-    "aws": "amazon web services",
+    "amazon web services": "aws",
     "restful": "restful api",
     "rest api": "restful api",
     "rest": "restful api",
@@ -110,7 +110,7 @@ SKILL_DICTIONARY: set[str] = {
     "sql", "mysql", "postgresql", "mongodb", "redis", "elasticsearch",
     "sqlite", "oracle", "cassandra", "dynamodb", "firebase",
     # Cloud & DevOps
-    "aws", "amazon web services", "azure", "google cloud platform", "docker",
+    "aws", "azure", "google cloud platform", "docker",
     "kubernetes", "terraform", "ansible", "ci/cd", "jenkins", "github actions",
     "linux", "bash", "git",
     # Data & ML
@@ -133,6 +133,9 @@ SKILL_DICTIONARY: set[str] = {
     "git", "agile", "scrum", "jira", "linux", "bash scripting",
     "statistical analysis", "probability", "linear algebra",
     "time series analysis", "a/b testing",
+    # Skills that appear in the bundled dataset's skill tags and descriptions
+    "jwt", "redux", "celery", "sqlalchemy", "etl", "snowflake", "scrapy",
+    "data modeling",
 }
 
 # ---------------------------------------------------------------------------

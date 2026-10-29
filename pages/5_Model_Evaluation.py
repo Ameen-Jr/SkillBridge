@@ -21,7 +21,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app import load_pipeline
+from src.pipeline import load_pipeline
 from src.evaluation import (
     evaluate_career_matching,
     evaluate_overlap_matching,
@@ -180,6 +180,17 @@ with tab3:
                        font={"color": "#c9d1d9"}, height=320, margin={"t": 10},
                        legend={"font": {"color": "#c9d1d9"}})
     st.plotly_chart(fig2, use_container_width=True)
+
+    _c1, _o1 = cosine_eval["precision_at_1"], overlap_eval["precision_at_1"]
+    if _o1 > _c1:
+        st.info(f"On this evaluation set the skill-overlap baseline (P@1 = {_o1:.2f}) ranked the expected "
+                f"category first more often than cosine similarity (P@1 = {_c1:.2f}). The simple baseline "
+                "is competitive; neither method should be presented as clearly superior.")
+    elif _c1 > _o1:
+        st.info(f"On this evaluation set cosine similarity (P@1 = {_c1:.2f}) ranked the expected category "
+                f"first more often than the overlap baseline (P@1 = {_o1:.2f}).")
+    else:
+        st.info(f"Both methods achieve the same P@1 ({_c1:.2f}) on this evaluation set.")
 
     st.caption(cosine_eval.get("limitation", ""))
 

@@ -18,7 +18,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app import load_pipeline
+from src.pipeline import load_pipeline
 from src.config import CAREER_CATEGORIES
 from src.recommendations import build_learning_plan, get_skill_display_name, get_resources_for_skill
 from src.reporting import export_skill_gap_csv
