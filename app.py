@@ -22,7 +22,7 @@ import streamlit as st
 # Ensure src/ is importable when running from project root
 sys.path.insert(0, str(Path(__file__).parent))
 
-from src.config import SKILL_DICTIONARY
+from src.config import CAREER_CATEGORIES, SKILL_DICTIONARY
 from src.pipeline import load_pipeline
 
 # ---------------------------------------------------------------------------
@@ -308,6 +308,14 @@ if "Synthetic" in source:
     )
 else:
     st.success(f"✅ Dataset loaded: {source}")
+
+if not set(CAREER_CATEGORIES) & set(stats["categories"]):
+    st.warning(
+        "⚠️ The loaded dataset's categories "
+        f"({', '.join(stats['categories'][:6])}) are not the tech roles this tool is designed for, "
+        "and its skills are mostly outside the 125-skill tech dictionary, so matches and gaps will "
+        "be weak. Unset `SKILLBRIDGE_USE_REAL_DATA` to use the bundled tech-role dataset."
+    )
 
 st.markdown("---")
 

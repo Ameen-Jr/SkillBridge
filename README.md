@@ -70,7 +70,7 @@ src/
   evaluation.py            Labelled eval sets and metrics
   reporting.py             CSV export
   pipeline.py              Cached shared pipeline (used by app and pages)
-tests/                     149 pytest tests (incl. page smoke tests)
+tests/                     173 pytest tests (incl. page smoke tests)
 data/                      sample_jobs.csv + data/README.md
 reports/                   Example exported results
 docs/                      Architecture, project report, demo script, viva Q&A
@@ -93,8 +93,24 @@ Optional network tab: `pip install pyvis` (Plotly graph works without it).
 
 ## Dataset
 
-- **Bundled:** `data/sample_jobs.csv`, synthetic, columns `job_id, category, job_title, job_description, job_skill_set`.
-- **Optional:** on first launch the app tries to download the Hugging Face dataset `batuhanmtl/job-skill-set` into `data/jobs.csv` and prefers it if valid. **This download path could not be tested during handoff** (network blocked in the build environment), and the dataset's actual schema/licence were not verified. If the download fails or lacks the required columns, the app falls back to the sample data and says so on the dashboard. Check the dataset page's licence before using it. See `data/README.md`.
+- **Default (bundled):** `data/sample_jobs.csv`, synthetic tech roles, columns `job_id, category, job_title, job_description, job_skill_set`. Everything in this README, the demo script and the evaluation numbers refers to this dataset.
+- **Optional real data (opt-in):** the Hugging Face dataset `batuhanmtl/job-skill-set` (≈1,167 rows) is downloaded into `data/jobs.csv` **only** when you set `SKILLBRIDGE_USE_REAL_DATA=1`:
+
+  ```powershell
+  $env:SKILLBRIDGE_USE_REAL_DATA = "1"
+  streamlit run app.py
+  ```
+
+  Verified on a real run: it downloads and passes schema validation. But its 5 categories are **INFORMATION-TECHNOLOGY, BUSINESS-DEVELOPMENT, FINANCE, SALES, HR** (about 220–240 rows each), not tech roles, and its skill tags are mostly non-technical (e.g. `employee relations`, `payroll processing`) and stored as Python-list strings (`['a', 'b']`, now parsed correctly). With the 125-skill tech dictionary, matches are weak (observed: all category scores within 0.13–0.16, silhouette 0.071). The app shows a warning, hides career-matching evaluation examples whose roles are absent, and takes the Profile role list from the loaded data. Check the dataset's licence before using it.
+
+## Deploying as a website (Streamlit Community Cloud, free)
+
+1. Push the repo to GitHub (branch `main`).
+2. Go to https://share.streamlit.io, sign in with GitHub, choose *Create app*.
+3. Repository `Ameen-Jr/SkillBridge`, branch `main`, main file `app.py`; in *Advanced settings* choose Python 3.12 or 3.13.
+4. Deploy. You get a public `*.streamlit.app` link.
+
+The deployed app uses the bundled dataset because `SKILLBRIDGE_USE_REAL_DATA` is not set. Free apps sleep after inactivity and wake on the next visit. Do not set that variable on the deployment unless you want the business-jobs dataset.
 
 ## Limitations
 
@@ -108,7 +124,7 @@ Optional network tab: `pip install pyvis` (Plotly graph works without it).
 | Symptom | Fix |
 |---|---|
 | `ModuleNotFoundError: src` | Run commands from the project root |
-| Slow first start / warning about download | The app tries the HuggingFace download once; create `data/jobs.csv` yourself or ignore the warning |
+| Dashboard warns about non-tech categories | `SKILLBRIDGE_USE_REAL_DATA` is set; unset it (`Remove-Item Env:SKILLBRIDGE_USE_REAL_DATA`) to use the bundled data |
 | Banner says "synthetic sample data" | Expected with the bundled dataset |
 | Network tab says PyVis missing | `pip install pyvis` or use the Plotly tab |
 | `use_container_width` deprecation warnings | Harmless on current Streamlit; cosmetic |

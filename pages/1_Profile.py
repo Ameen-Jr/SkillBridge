@@ -16,6 +16,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.config import CAREER_CATEGORIES, SKILL_DICTIONARY
+from src.pipeline import load_pipeline
 from src.preprocessing import skills_from_user_input
 from src.skill_extractor import normalize_user_skills
 
@@ -103,13 +104,16 @@ with col_input:
     st.markdown("---")
 
     st.markdown("### 🎯 Career Interests (Optional)")
-    st.markdown("Select roles you are interested in exploring:")
+    st.markdown("Select a role from the loaded dataset to explore:")
+    try:
+        available_categories = sorted(load_pipeline()["df"]["category"].dropna().unique().tolist())
+    except Exception:
+        available_categories = list(CAREER_CATEGORIES)  # fallback if data cannot load
+    current = st.session_state.selected_category
     interest = st.selectbox(
         "Career Interest",
-        options=["No preference"] + CAREER_CATEGORIES,
-        index=0 if st.session_state.selected_category is None else
-              (CAREER_CATEGORIES.index(st.session_state.selected_category) + 1
-               if st.session_state.selected_category in CAREER_CATEGORIES else 0),
+        options=["No preference"] + available_categories,
+        index=(available_categories.index(current) + 1) if current in available_categories else 0,
         label_visibility="collapsed",
         key="career_interest_select",
     )

@@ -14,7 +14,7 @@ import re
 import pandas as pd
 
 from src.config import SKILL_ALIASES, SKILL_DICTIONARY
-from src.preprocessing import clean_text, normalize_skill_name
+from src.preprocessing import clean_text, normalize_skill_name, split_skill_tags
 
 
 # ---------------------------------------------------------------------------
@@ -82,8 +82,8 @@ def extract_skills_from_row(skill_string: str, description: str = "") -> list[st
     # From the structured skill_set field (comma-separated)
     from_skills_col: set[str] = set()
     if skill_string:
-        for raw in skill_string.split(","):
-            norm = normalize_skill_name(raw.strip())
+        for raw in split_skill_tags(skill_string):
+            norm = normalize_skill_name(raw)
             if norm in SKILL_DICTIONARY:
                 from_skills_col.add(norm)
 

@@ -6,6 +6,7 @@ and learning resources are defined here so every other module
 reads from a single source of truth.
 """
 
+import os
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -22,6 +23,18 @@ HF_PARQUET_URL = (
     "https://huggingface.co/datasets/batuhanmtl/job-skill-set/"
     "resolve/refs%2Fconvert%2Fparquet/default/train/0000.parquet"
 )
+
+# ---------------------------------------------------------------------------
+# Dataset selection
+# The bundled synthetic tech-role dataset is the default. The optional
+# HuggingFace dataset (general business jobs: HR, finance, sales, ...) is
+# opt-in only: set the environment variable SKILLBRIDGE_USE_REAL_DATA=1.
+# ---------------------------------------------------------------------------
+
+def use_real_data() -> bool:
+    """True only when the user explicitly opted in to the external dataset."""
+    return os.environ.get("SKILLBRIDGE_USE_REAL_DATA", "").strip().lower() in {"1", "true", "yes"}
+
 
 # ---------------------------------------------------------------------------
 # Required dataset columns

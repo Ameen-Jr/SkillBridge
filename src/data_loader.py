@@ -16,6 +16,8 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+from src.preprocessing import split_skill_tags
+
 from src.config import (
     HF_PARQUET_URL,
     JOBS_CSV,
@@ -122,8 +124,7 @@ def get_dataset_stats(df: pd.DataFrame) -> dict:
     """
     skill_counts = []
     for val in df["job_skill_set"].dropna():
-        skills = [s.strip() for s in str(val).split(",") if s.strip()]
-        skill_counts.append(len(skills))
+        skill_counts.append(len(split_skill_tags(str(val))))
 
     return {
         "total_records": len(df),

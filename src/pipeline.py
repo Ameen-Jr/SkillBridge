@@ -8,7 +8,7 @@ dashboard script, which would call st.set_page_config twice and st.stop().
 import streamlit as st
 
 from src.clustering import calculate_silhouette, fit_kmeans, get_cluster_info
-from src.config import N_CLUSTERS
+from src.config import N_CLUSTERS, use_real_data
 from src.data_loader import get_dataset_stats, load_dataset
 from src.feature_engineering import (
     build_skill_cooccurrence,
@@ -27,7 +27,7 @@ def load_pipeline() -> dict:
     Cached once per server process, so page navigation never refits models.
     Returns a dict with all shared ML artifacts.
     """
-    df, source = load_dataset(prefer_hf=True)
+    df, source = load_dataset(prefer_hf=use_real_data())
 
     df = preprocess_dataframe(df)
     df["extracted_skills"] = extract_skills_from_df(df)

@@ -178,6 +178,23 @@ def evaluate_skill_extraction(
 # Career matching metrics
 # ---------------------------------------------------------------------------
 
+def _restrict_to_loaded_categories(
+    eval_set: Optional[list[dict]],
+    df: pd.DataFrame,
+) -> tuple[list[dict], int]:
+    """
+    Keep only evaluation examples whose expected category exists in the data.
+
+    Testing a category the dataset does not contain would always count as a
+    miss and make the metric meaningless. Returns (kept_examples, n_skipped).
+    """
+    if eval_set is None:
+        eval_set = CAREER_MATCH_EVAL
+    available = set(df["category"].dropna().unique()) if "category" in df.columns else set()
+    kept = [item for item in eval_set if item["expected_category"] in available]
+    return kept, len(eval_set) - len(kept)
+
+
 def evaluate_career_matching(
     vectorizer: TfidfVectorizer,
     tfidf_matrix: csr_matrix,
@@ -206,8 +223,7 @@ def evaluate_career_matching(
     from src.feature_engineering import transform_user_query
     from src.matching import cosine_match, aggregate_matches_by_category
 
-    if eval_set is None:
-        eval_set = CAREER_MATCH_EVAL
+    eval_set, n_skipped = _restrict_to_loaded_categories(eval_set, df)
 
     hits_at_1 = 0
     hits_at_k = 0
@@ -244,10 +260,13 @@ def evaluate_career_matching(
         "precision_at_1": round(hits_at_1 / n, 3) if n > 0 else 0.0,
         f"precision_at_{top_k}": round(hits_at_k / n, 3) if n > 0 else 0.0,
         "n_examples": n,
+        "n_skipped": n_skipped,
         "top_k": top_k,
         "per_example": per_example,
         "limitation": (
-            f"Evaluated on {n} hand-crafted examples. "
+            f"Evaluated on {n} hand-crafted examples"
+            + (f" ({n_skipped} skipped: their expected category is not in the loaded dataset)" if n_skipped else "")
+            + ". "
             "The evaluation set was designed to be representative but is not exhaustive. "
             "Real-world accuracy may differ."
         ),
@@ -265,8 +284,7 @@ def evaluate_overlap_matching(
     """
     from src.matching import skill_overlap_match, aggregate_overlap_by_category
 
-    if eval_set is None:
-        eval_set = CAREER_MATCH_EVAL
+    eval_set, n_skipped = _restrict_to_loaded_categories(eval_set, df)
 
     hits_at_1 = 0
     hits_at_k = 0
@@ -301,6 +319,7 @@ def evaluate_overlap_matching(
         "precision_at_1": round(hits_at_1 / n, 3) if n > 0 else 0.0,
         f"precision_at_{top_k}": round(hits_at_k / n, 3) if n > 0 else 0.0,
         "n_examples": n,
+        "n_skipped": n_skipped,
         "top_k": top_k,
         "per_example": per_example,
     }

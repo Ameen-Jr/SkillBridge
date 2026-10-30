@@ -160,51 +160,60 @@ with tab3:
         "Metric: Precision@K (whether the expected category appears in top K results)."
     )
 
-    mc1, mc2, mc3, mc4 = st.columns(4)
-    mc1.metric("Cosine P@1", f"{cosine_eval['precision_at_1']:.3f}",
-               help="Fraction of examples where the top category matched.")
-    mc2.metric(f"Cosine P@3", f"{cosine_eval.get('precision_at_3', 0):.3f}")
-    mc3.metric("Overlap P@1", f"{overlap_eval['precision_at_1']:.3f}")
-    mc4.metric(f"Overlap P@3", f"{overlap_eval.get('precision_at_3', 0):.3f}")
-
-    # Comparison chart
-    compare_data = pd.DataFrame({
-        "Method": ["Cosine Similarity", "Skill Overlap Baseline"],
-        "Precision@1": [cosine_eval["precision_at_1"], overlap_eval["precision_at_1"]],
-        f"Precision@3": [cosine_eval.get("precision_at_3", 0), overlap_eval.get("precision_at_3", 0)],
-    })
-    fig2 = go.Figure()
-    fig2.add_trace(go.Bar(name="Precision@1", x=compare_data["Method"], y=compare_data["Precision@1"], marker_color="#58a6ff"))
-    fig2.add_trace(go.Bar(name="Precision@3", x=compare_data["Method"], y=compare_data["Precision@3"], marker_color="#3fb950"))
-    fig2.update_layout(barmode="group", template="plotly_dark", plot_bgcolor="#0d1117", paper_bgcolor="#161b22",
-                       font={"color": "#c9d1d9"}, height=320, margin={"t": 10},
-                       legend={"font": {"color": "#c9d1d9"}})
-    st.plotly_chart(fig2, use_container_width=True)
-
-    _c1, _o1 = cosine_eval["precision_at_1"], overlap_eval["precision_at_1"]
-    if _o1 > _c1:
-        st.info(f"On this evaluation set the skill-overlap baseline (P@1 = {_o1:.2f}) ranked the expected "
-                f"category first more often than cosine similarity (P@1 = {_c1:.2f}). The simple baseline "
-                "is competitive; neither method should be presented as clearly superior.")
-    elif _c1 > _o1:
-        st.info(f"On this evaluation set cosine similarity (P@1 = {_c1:.2f}) ranked the expected category "
-                f"first more often than the overlap baseline (P@1 = {_o1:.2f}).")
-    else:
-        st.info(f"Both methods achieve the same P@1 ({_c1:.2f}) on this evaluation set.")
-
-    st.caption(cosine_eval.get("limitation", ""))
-
-    # Per-example detail
-    with st.expander("View per-example matching results"):
-        per_match = pd.DataFrame(cosine_eval["per_example"])
-        per_match = per_match.rename(columns={
-            "expected": "Expected", "top_predictions": "Top Predictions",
-            "hit_at_1": "Hit@1", "hit_at_k": "Hit@3",
-        })
-        st.dataframe(
-            per_match[["Expected", "Top Predictions", "Hit@1", "Hit@3"]],
-            use_container_width=True, hide_index=True,
+    if cosine_eval.get("n_skipped"):
+        st.warning(
+            f"{cosine_eval['n_skipped']} of the hand-crafted examples were skipped because their expected "
+            "role is not a category in the loaded dataset. Metrics cover only the remaining examples."
         )
+    if cosine_eval["n_examples"] == 0:
+        st.info("None of the evaluation examples apply to the loaded dataset's categories, "
+                "so Precision@K cannot be computed. The bundled sample dataset supports all examples.")
+    else:
+        mc1, mc2, mc3, mc4 = st.columns(4)
+        mc1.metric("Cosine P@1", f"{cosine_eval['precision_at_1']:.3f}",
+                   help="Fraction of examples where the top category matched.")
+        mc2.metric(f"Cosine P@3", f"{cosine_eval.get('precision_at_3', 0):.3f}")
+        mc3.metric("Overlap P@1", f"{overlap_eval['precision_at_1']:.3f}")
+        mc4.metric(f"Overlap P@3", f"{overlap_eval.get('precision_at_3', 0):.3f}")
+
+        # Comparison chart
+        compare_data = pd.DataFrame({
+            "Method": ["Cosine Similarity", "Skill Overlap Baseline"],
+            "Precision@1": [cosine_eval["precision_at_1"], overlap_eval["precision_at_1"]],
+            f"Precision@3": [cosine_eval.get("precision_at_3", 0), overlap_eval.get("precision_at_3", 0)],
+        })
+        fig2 = go.Figure()
+        fig2.add_trace(go.Bar(name="Precision@1", x=compare_data["Method"], y=compare_data["Precision@1"], marker_color="#58a6ff"))
+        fig2.add_trace(go.Bar(name="Precision@3", x=compare_data["Method"], y=compare_data["Precision@3"], marker_color="#3fb950"))
+        fig2.update_layout(barmode="group", template="plotly_dark", plot_bgcolor="#0d1117", paper_bgcolor="#161b22",
+                           font={"color": "#c9d1d9"}, height=320, margin={"t": 10},
+                           legend={"font": {"color": "#c9d1d9"}})
+        st.plotly_chart(fig2, use_container_width=True)
+
+        _c1, _o1 = cosine_eval["precision_at_1"], overlap_eval["precision_at_1"]
+        if _o1 > _c1:
+            st.info(f"On this evaluation set the skill-overlap baseline (P@1 = {_o1:.2f}) ranked the expected "
+                    f"category first more often than cosine similarity (P@1 = {_c1:.2f}). The simple baseline "
+                    "is competitive; neither method should be presented as clearly superior.")
+        elif _c1 > _o1:
+            st.info(f"On this evaluation set cosine similarity (P@1 = {_c1:.2f}) ranked the expected category "
+                    f"first more often than the overlap baseline (P@1 = {_o1:.2f}).")
+        else:
+            st.info(f"Both methods achieve the same P@1 ({_c1:.2f}) on this evaluation set.")
+
+        st.caption(cosine_eval.get("limitation", ""))
+
+        # Per-example detail
+        with st.expander("View per-example matching results"):
+            per_match = pd.DataFrame(cosine_eval["per_example"])
+            per_match = per_match.rename(columns={
+                "expected": "Expected", "top_predictions": "Top Predictions",
+                "hit_at_1": "Hit@1", "hit_at_k": "Hit@3",
+            })
+            st.dataframe(
+                per_match[["Expected", "Top Predictions", "Hit@1", "Hit@3"]],
+                use_container_width=True, hide_index=True,
+            )
 
 
 with tab4:

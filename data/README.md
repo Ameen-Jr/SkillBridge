@@ -39,7 +39,7 @@ SkillBridge uses a job description dataset containing technical job postings enr
 
 ## HuggingFace Dataset (`jobs.csv`)
 
-The application can optionally download the [`batuhanmtl/job-skill-set`](https://huggingface.co/datasets/batuhanmtl/job-skill-set) dataset from HuggingFace.
+**Opt-in only** (set `SKILLBRIDGE_USE_REAL_DATA=1`). The application can then download the [`batuhanmtl/job-skill-set`](https://huggingface.co/datasets/batuhanmtl/job-skill-set) dataset from HuggingFace.
 
 ### Dataset Details
 
@@ -61,7 +61,7 @@ The application can optionally download the [`batuhanmtl/job-skill-set`](https:/
 
 ### How to Download
 
-The application will attempt to auto-download this dataset on first launch. If that fails:
+With the opt-in flag set, the application attempts to auto-download this dataset on launch. If that fails:
 
 1. Visit: https://huggingface.co/datasets/batuhanmtl/job-skill-set
 2. Click **Files and versions**
@@ -95,3 +95,12 @@ You can replace or supplement the sample with your own CSV. Requirements:
 3. `job_skill_set` should contain comma-separated skill names.
 
 The data loader will validate your file on startup and report any missing columns.
+
+---
+
+## Observed characteristics of the HuggingFace data (checked on a real run)
+
+- 1,167 rows; categories: INFORMATION-TECHNOLOGY (240), BUSINESS-DEVELOPMENT (239), FINANCE (236), SALES (232), HR (220).
+- `job_skill_set` is a Python-list string such as `['employee relations', 'talent acquisition', ...]`; the loader parses both this and comma-separated formats.
+- Descriptions are ALL CAPS and resume-style; skills are mostly non-technical, so most fall outside the 125-skill tech dictionary.
+- Not a tech-role dataset: career-matching results on it are weak and should not be presented as meaningful.

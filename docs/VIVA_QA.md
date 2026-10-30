@@ -37,7 +37,7 @@ Nodes are skills, edges mean the two skills appeared in the same job at least *t
 (a) An invalid f-string crashed the dashboard; (b) pages imported `app.py`, re-running it and crashing every page — fixed by moving the cached pipeline to `src/pipeline.py`; (c) AWS was split into two names, halving its counts and breaking learning-resource lookup; (d) a Plotly property removed in newer versions broke the network page; (e) an index error when no entered skill is in the vocabulary; (f) empty-demand DataFrame lost its columns. Each has a regression test.
 
 **13. Why is the dataset synthetic and what are the consequences?**
-No real, licensed dataset could be verified. Frequencies reflect the author's design, not the labour market, so conclusions apply only to this dataset. The app supports swapping in a real CSV with the same columns.
+No real, licensed dataset could be verified. Frequencies reflect the author's design, not the labour market, so conclusions apply only to this dataset. The app supports swapping in a real CSV with the same columns. We also tried the public Hugging Face dataset (opt-in): it loads, but its categories are business functions (IT, HR, Finance, Sales, Business Development) with mostly non-technical skills, so it is unsuitable for tech-role matching without a different dictionary — a documented limitation.
 
 **14. How is the app kept fast?**
 `st.cache_resource` in `src/pipeline.py` fits TF-IDF and K-means once per server process; pages reuse it.

@@ -5,6 +5,7 @@ Applies consistent preprocessing to job descriptions and user-entered
 skill text before TF-IDF vectorization and skill extraction.
 """
 
+import ast
 import re
 import unicodedata
 
@@ -75,6 +76,28 @@ def normalize_skill_list(skills: list[str]) -> list[str]:
     return sorted(result)
 
 
+def split_skill_tags(value) -> list[str]:
+    """
+    Split a skill-tag field into individual raw tags.
+
+    Supports both formats seen in the datasets:
+    - comma separated:        "Python, SQL, Docker"
+    - Python-list literal:    "['Python', 'SQL', 'Docker']"
+    Non-string input returns an empty list.
+    """
+    if not isinstance(value, str) or not value.strip():
+        return []
+    text = value.strip()
+    if text.startswith("["):
+        try:
+            parsed = ast.literal_eval(text)
+            if isinstance(parsed, (list, tuple)):
+                return [str(s).strip() for s in parsed if str(s).strip()]
+        except (ValueError, SyntaxError):
+            text = text.strip("[]")
+    return [s.strip().strip("'\"") for s in text.split(",") if s.strip().strip("'\"")]
+
+
 def parse_skill_string(skill_string: str) -> list[str]:
     """
     Parse a comma-separated skill string into a normalized list of skill names.
@@ -84,8 +107,7 @@ def parse_skill_string(skill_string: str) -> list[str]:
     """
     if not skill_string or not isinstance(skill_string, str):
         return []
-    raw_skills = [s.strip() for s in skill_string.split(",") if s.strip()]
-    return normalize_skill_list(raw_skills)
+    return normalize_skill_list(split_skill_tags(skill_string))
 
 
 def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:

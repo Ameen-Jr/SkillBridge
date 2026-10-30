@@ -7,7 +7,7 @@ SkillBridge is a Streamlit application that compares a student's technical skill
 See PRD.md §3. All eleven objectives are implemented; export, network and evaluation pages are working.
 
 ## 3. Dataset
-`data/sample_jobs.csv`: 150 synthetic job records (23–26 per category across 6 categories), average 8.6 skill tags per job. It is synthetic and must not be presented as real labour-market data. An optional Hugging Face dataset can be placed in `data/jobs.csv`; its schema and licence were not verified in this work.
+`data/sample_jobs.csv`: 150 synthetic job records (23–26 per category across 6 categories), average 8.6 skill tags per job. It is synthetic and must not be presented as real labour-market data. An optional Hugging Face dataset (opt-in via `SKILLBRIDGE_USE_REAL_DATA=1`) loads and passes schema validation (1,167 rows) but covers general business categories (IT, Business Development, Finance, Sales, HR), not tech roles, so it gives weak results with the tech skill dictionary; its licence was not verified.
 
 ## 4. Methodology
 1. **Cleaning** — lowercase, ASCII normalization, preserve `c++`, `c#`, `node.js`.
@@ -33,7 +33,7 @@ Example for the profile *Python, SQL, pandas, Docker, git, ML*: top cosine categ
 The overlap baseline matched or beat cosine similarity on top-1 accuracy, which is plausible because the evaluation profiles are lists of exact dictionary skills and the baseline compares exactly those. The weak silhouette and mixed clusters show the synthetic categories are not separable by vocabulary. Evaluation sets are small and author-written, so results are indicative only.
 
 ## 7. Testing
-149 pytest tests: unit tests for each module, plus regression tests and a Streamlit AppTest smoke test of all 7 pages with empty, typical and unrecognized profiles. All pass (see README for command). The HuggingFace download path and a manual browser walkthrough were not performed in the build environment.
+173 pytest tests: unit tests for each module, plus regression tests and a Streamlit AppTest smoke test of all 7 pages with empty, typical and unrecognized profiles. All pass (see README for command). The HuggingFace download could not be run in the build environment; it was later confirmed by the project owner on a local machine (1,167 rows loaded).
 
 ## 8. Limitations and future work
 See README "Limitations" and viva Q15.
